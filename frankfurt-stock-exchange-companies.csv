@@ -1,0 +1,165 @@
+Rank,Name,Symbol
+1,SAP,SAP
+2,Volkswagen,VOW3.DE
+3,Siemens,SIE.DE
+4,Deutsche Telekom,DTE.DE
+5,Allianz,ALV.DE
+6,Hapag-Lloyd,HLAG.DE
+7,Merck KGaA,MRK.DE
+8,Mercedes-Benz,MBG.DE
+9,Siemens Healthineers,SHL.DE
+10,Bayer,BAYZF
+11,BMW,BMW.DE
+12,Deutsche Post,DPW.DE
+13,BASF,BAS.DE
+14,Infineon,IFX.DE
+15,Adidas,ADS.DE
+16,BioNTech,BNTX
+17,Munich RE (Münchener Rück),MUV2.DE
+18,Vonovia,VNA.DE
+19,Deutsche Börse,DB1.DE
+20,RWE,RWE.DE
+21,EnBW Energie,EBK.DE
+22,Henkel,HEN3
+23,E.ON,EOAN.DE
+24,Daimler Truck,DTG.F
+25,Sartorius,SRT.DE
+26,Porsche SE,PAH3.DE
+27,Fresenius,FRE.DE
+28,Beiersdorf,BEI.DE
+29,Deutsche Bank,DB
+30,Hannover R�ck,HNR1.DE
+31,Fresenius Medical Care,FMS
+32,Symrise,SY1.DE
+33,Continental,CON.DE
+34,Evonik Industries,EVK.DE
+35,Siemens Energy,ENR.F
+36,Knorr-Bremse,KBX.DE
+37,Brenntag,BNR.DE
+38,Carl Zeiss Meditec,AFXA.F
+39,Deutsche Wohnen,DWNI.DE
+40,HeidelbergCement,HEI.DE
+41,Talanx,TLX
+42,PUMA,PUM.DE
+43,Uniper,UN01.DE
+44,MTU Aero Engines,MTX.DE
+45,Zalando,ZAL.DE
+46,Traton,8TRA.DE
+47,Commerzbank,CBK.F
+48,Wacker Chemie,WCH.F
+49,Rheinmetall,RHM.F
+50,Lufthansa,LHA.DE
+51,Covestro,1COV.F
+52,Delivery Hero,DHER.F
+53,Nemetschek,NEM.F
+54,HelloFresh,HFG.DE
+55,LEG Immobilien,LEG.DE
+56,HELLA,HLE.F
+57,KION Group,KGX.DE
+58,DWS Group,DWS.F
+59,GEA Group,G1A.F
+60,CTS Eventim,EVD.F
+61,Rational AG,RAA.F
+62,United Internet,UTDI.F
+63,K+S,SDF.F
+64,Bechtle,BC8.F
+65,Thyssenkrupp,TKA.F
+66,Sixt,SIX2.F
+67,Gelsenwasser,WWG.F
+68,TUI,TUI1.F
+69,Fraport,FRA.DE
+70,Lechwerke,LEC.F
+71,Scout24,G24.F
+72,Evotec,EVO
+73,Hochtief,HOT.F
+74,Fielmann,FIE.F
+75,Aurubis,NDA.F
+76,Schaeffler,SHA.F
+77,Fuchs Petrolub,FPE.F
+78,HUGO BOSS,BOSS.DE
+79,Verbio,VBK.F
+80,1&1,1U1.DE
+81,Kuka,KU2.F
+82,DMG Mori,GIL.F
+83,Lanxess,LXS.F
+84,Varta,VAR1.F
+85,Mainova,MNV6.F
+86,Encavis,ECV.F
+87,Ströer,SAX.F
+88,Metro AG,B4B.F
+89,Freenet,FNTN.F
+90,Curevac,CVAC
+91,Dermapharm,DMP.F
+92,Aixtron,AIXA.F
+93,TAG Immobilien,TEG.F
+94,TeamViewer,TMV.DE
+95,CompuGroup Medical,COP.DE
+96,Siltronic,WAF.F
+97,Südzucker,SZU.F
+98,Krones,KRN.F
+99,Hensoldt,HAG.F
+100,Jungheinrich,JUN3.F
+101,ProSiebenSat.1 Media,PSM.F
+102,SIGNA Sports United,SSU
+103,secunet,YSN.F
+104,Software AG,SOW.F
+105,MVV Energie,MVV1.F
+106,BayWa,BYW.F
+107,Gerresheimer,GXI.F
+108,KWS,KWS.F
+109,AUTO1,AG1.F
+110,Salzgitter,SZG.F
+111,Aareal Bank,ARL.F
+112,Hornbach Holding,HBH.F
+113,Nordex,NDX1.F
+114,Dürr,DUE.F
+115,Wüstenrot & Württembergische,WUW.F
+116,GAG Immobilien,GWK3.HM
+117,Hypoport,HYQ.F
+118,Pfeiffer Vacuum,PFV.F
+119,Biotest,BIO.F
+120,SMA Solar Technology,S92.F
+121,Hornbach Baumarkt,HBM.F
+122,flatexDEGIRO AG,FTK.DE
+123,Jenoptik,JEN.F
+124,Cancom,COK.F
+125,Wacker Neuson,WAC.F
+126,STRATEC,SBS.F
+127,Hamburger Hafen,HHFA.F
+128,Grenke,GLJ.F
+129,Patrizia Immobilien,P1Z.VI
+130,Bilfinger,GBF.F
+131,Atoss,AOF.F
+132,CropEnergies,CE2.F
+133,Rhön-Klinikum,RHK.DE
+134,Deutsche EuroShop,DEQ.F
+135,Gateway Real Estate,GTY.F
+136,Eckert & Ziegler,EUZ
+137,Mensch und Maschine,MUM.F
+138,Drägerwerk,DRW8.F
+139,Nürnberger Versicherung,NBG6.F
+140,VIB Vermögen,VIH1.F
+141,Zeal Network,TIMA.F
+142,MYT Netherlands Parent (Mytheresa),MYTE
+143,Norma Group,NOEJ.F
+144,Lilium,LILM
+145,New Work,NWO.F
+146,Indus Holding,INH.F
+147,CEWE,CWC.F
+148,Atai Life Sciences,ATAI
+149,Morphosys,MOR
+150,trivago,TRVG
+151,Adler Real Estate,ADL.DE
+152,Jumia,JMIA
+153,Simona,SIM0.F
+154,Affimed,AFMD
+155,Borussia Dortmund,BVB.F
+156,Immatics,IMTX
+157,PREOS Real Estate,PAG.F
+158,Sono,SEV
+159,Mynaric,MYNA
+160,Mister Spex,MRX.F
+161,KAP AG,IUR.F
+162,Compleo Charging Solutions,C0M.F
+163,Mainz Biomed,MYNZ
+164,InflaRx,IFRX
