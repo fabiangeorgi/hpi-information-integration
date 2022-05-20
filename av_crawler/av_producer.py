@@ -5,8 +5,8 @@ from confluent_kafka.schema_registry import SchemaRegistryClient
 from confluent_kafka.schema_registry.protobuf import ProtobufSerializer
 from confluent_kafka.serialization import StringSerializer
 
-from build.gen.bakdata.corporate.v1 import corporate_pb2
-from build.gen.bakdata.corporate.v1.corporate_pb2 import StockCorporate
+from build.gen.bakdata.stock.v1 import stock_pb2
+from build.gen.bakdata.stock.v1.stock_pb2 import StockCorporate
 from constant import SCHEMA_REGISTRY_URL, BOOTSTRAP_SERVER, STOCK_TOPIC
 
 logging.basicConfig(level=logging.INFO)
@@ -19,7 +19,7 @@ class AVProducer:
         schema_registry_client = SchemaRegistryClient(schema_registry_conf)
 
         protobuf_serializer = ProtobufSerializer(
-            corporate_pb2.StockCorporate, schema_registry_client, {"use.deprecated.format": True}
+            stock_pb2.StockCorporate, schema_registry_client, {"use.deprecated.format": True}
         )
 
         producer_conf = {
@@ -31,13 +31,11 @@ class AVProducer:
         self.producer = SerializingProducer(producer_conf)
 
     def produce_to_topic(self, stock_corporate: StockCorporate):
-        try:
-            self.producer.produce(
-                topic=STOCK_TOPIC, partition=0, key=str(stock_corporate.id), value=stock_corporate,
-                on_delivery=self.delivery_report
-            )
-        except Exception as err:
-             log.error("ERROR WHEN PRODUCING MESSAGE")
+        self.producer.produce(
+            topic=STOCK_TOPIC, partition=-1, key=str(stock_corporate.id), value=stock_corporate,
+            on_delivery=self.delivery_report
+        )
+
         # It is a naive approach to flush after each produce this can be optimised
         self.producer.poll()
 

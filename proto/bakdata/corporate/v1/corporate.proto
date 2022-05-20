@@ -19,24 +19,4 @@ enum Status {
   STATUS_ACTIVE = 2;
 }
 
-message StockEntry {
-  string id = 1;
-  string date = 2;
-  string open = 3;
-  string close = 4;
-  string high = 5;
-  string low = 6;
-  string volume = 7;
-}
 
-
-message StockCorporate {
-  string id = 1;
-  uint32 stock_id = 2;
-  string symbol = 3;
-  string company_name = 4;
-  optional string company_name_long = 5;
-  string last_refreshed = 6;
-  string time_zone = 7;
-  repeated StockEntry stockEntry = 8;
-}

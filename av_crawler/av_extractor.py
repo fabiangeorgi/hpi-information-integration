@@ -1,5 +1,5 @@
 import logging
-from build.gen.bakdata.corporate.v1.corporate_pb2 import StockCorporate, StockEntry
+from build.gen.bakdata.stock.v1.stock_pb2 import StockCorporate, StockEntry
 from av_producer import AVProducer
 
 logging.basicConfig(level=logging.INFO)
@@ -43,15 +43,16 @@ class AVExtractor:
                 stock_corporate.last_refreshed = meta['3. Last Refreshed']
                 stock_corporate.time_zone = meta['4. Time Zone']
                 for ix, stock_date in enumerate(stock_values):
-                    stock_entry = StockEntry()
-                    stock_entry.id = f"{symbol}_{i}_{ix}"
-                    stock_entry.date = stock_date
-                    stock_entry.open = stock_values[stock_date]['1. open']
-                    stock_entry.close = stock_values[stock_date]['4. close']
-                    stock_entry.high = stock_values[stock_date]['2. high']
-                    stock_entry.low = stock_values[stock_date]['3. low']
-                    stock_entry.volume = stock_values[stock_date]['5. volume']
-                    stock_corporate.stockEntry.append(stock_entry)
+                    if ix == 0:
+                        stock_entry = StockEntry()
+                        stock_entry.id = f"{symbol}_{i}_{ix}"
+                        stock_entry.date = stock_date
+                        stock_entry.open = stock_values[stock_date]['1. open']
+                        stock_entry.close = stock_values[stock_date]['4. close']
+                        stock_entry.high = stock_values[stock_date]['2. high']
+                        stock_entry.low = stock_values[stock_date]['3. low']
+                        stock_entry.volume = stock_values[stock_date]['5. volume']
+                        stock_corporate.stockEntry.append(stock_entry)
                 self.producer.produce_to_topic(stock_corporate)
                 log.debug(stock_corporate)
             except Exception as ex:
