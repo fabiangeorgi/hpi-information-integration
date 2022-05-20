@@ -9,6 +9,8 @@ from build.gen.bakdata.corporate.v1 import corporate_pb2
 from build.gen.bakdata.corporate.v1.corporate_pb2 import Corporate
 from rb_crawler.constant import SCHEMA_REGISTRY_URL, BOOTSTRAP_SERVER, TOPIC
 
+
+logging.basicConfig(level=logging.INFO)
 log = logging.getLogger(__name__)
 
 

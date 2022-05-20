@@ -32,10 +32,11 @@ message StockEntry {
 
 message StockCorporate {
   string id = 1;
-  string symbol = 2;
-  string company_name = 3;
-  string company_name_long = 4;
-  string last_refreshed = 5;
-  string time_zone = 6;
-  repeated StockEntry stocks = 7;
+  uint32 stock_id = 2;
+  string symbol = 3;
+  string company_name = 4;
+  optional string company_name_long = 5;
+  string last_refreshed = 6;
+  string time_zone = 7;
+  repeated StockEntry stockEntry = 8;
 }

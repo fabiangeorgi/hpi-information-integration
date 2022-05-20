@@ -1,3 +1,5 @@
+import logging
+
 import pandas as pd
 from pandas import DataFrame
 import requests
@@ -5,6 +7,9 @@ from av_extractor import AVExtractor
 
 API_KEY = '2KAXFVFXLKF0TWUN'
 
+logging.basicConfig(level=logging.INFO)
+
+log = logging.getLogger(__name__)
 
 def extract_data():
     df = pd.read_csv('../frankfurt-stock-exchange-companies.csv')

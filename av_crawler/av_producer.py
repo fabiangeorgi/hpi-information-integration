@@ -6,9 +6,10 @@ from confluent_kafka.schema_registry.protobuf import ProtobufSerializer
 from confluent_kafka.serialization import StringSerializer
 
 from build.gen.bakdata.corporate.v1 import corporate_pb2
-from build.gen.bakdata.corporate.v1.corporate_pb2 import StockCorporate, StockEntry
-from rb_crawler.constant import SCHEMA_REGISTRY_URL, BOOTSTRAP_SERVER, STOCK_TOPIC
+from build.gen.bakdata.corporate.v1.corporate_pb2 import StockCorporate
+from constant import SCHEMA_REGISTRY_URL, BOOTSTRAP_SERVER, STOCK_TOPIC
 
+logging.basicConfig(level=logging.INFO)
 log = logging.getLogger(__name__)
 
 
@@ -30,11 +31,13 @@ class AVProducer:
         self.producer = SerializingProducer(producer_conf)
 
     def produce_to_topic(self, stock_corporate: StockCorporate):
-        self.producer.produce(
-            topic=STOCK_TOPIC, partition=-1, key=str(stock_corporate.id), value=stock_corporate,
-            on_delivery=self.delivery_report
-        )
-
+        try:
+            self.producer.produce(
+                topic=STOCK_TOPIC, partition=0, key=str(stock_corporate.id), value=stock_corporate,
+                on_delivery=self.delivery_report
+            )
+        except Exception as err:
+             log.error("ERROR WHEN PRODUCING MESSAGE")
         # It is a naive approach to flush after each produce this can be optimised
         self.producer.poll()
 
