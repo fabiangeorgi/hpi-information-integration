@@ -7,10 +7,9 @@ message StockCorporate {
   uint32 stock_id = 2;
   string symbol = 3;
   string company_name = 4;
-  string company_name_long = 5;
-  string last_refreshed = 6;
-  string time_zone = 7;
-  repeated StockEntry stockEntry = 8;
+  string last_refreshed = 5;
+  string time_zone = 6;
+  repeated StockEntry stockEntry = 7;
 }
 
 message StockEntry {
