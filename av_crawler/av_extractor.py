@@ -27,7 +27,7 @@ class AVExtractor:
         self.producer = AVProducer()
 
     def extract(self):
-        for i, (symbol, company, company_long) in enumerate(self.symbol_list):
+        for i, (symbol, company) in enumerate(self.symbol_list):
             try:
                 log.info(f"Sending Request for: {symbol} and company: {company}")
                 text = get_stock_json(symbol)
@@ -36,16 +36,13 @@ class AVExtractor:
                     continue
                 meta = text['Meta Data']
                 stock_values = text['Weekly Time Series']
-                # stock_values = text['Time Series (Daily)']
                 stock_corporate = StockCorporate()
                 stock_corporate.id = f"{symbol}_{i}"
                 stock_corporate.stock_id = i
                 stock_corporate.symbol = symbol
                 stock_corporate.company_name = company
-                stock_corporate.company_name_long = company_long
                 stock_corporate.last_refreshed = meta['3. Last Refreshed']
                 stock_corporate.time_zone = meta['4. Time Zone']
-                # stock_corporate.time_zone = meta['5. Time Zone']
                 for ix, stock_date in enumerate(stock_values):
                     stock_entry = StockEntry()
                     stock_entry.id = f"{symbol}_{i}_{ix}"
