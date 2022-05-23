@@ -109,6 +109,16 @@ To start the connector, you need to push the JSON config file to Kafka. You can 
 use the [bash script provided](./connect/push-config.sh). It is possible to remove a connector by deleting it
 through Kowl's UI dashboard or calling the deletion API in the [bash script provided](./connect/delete-config.sh).
 
+
+### AV Crawler
+
+You can start the crawler with the command below:
+
+```shell
+poetry run python av_crawler/mapper.py 
+```
+
+
 ### RB Crawler
 
 You can start the crawler with the command below:
