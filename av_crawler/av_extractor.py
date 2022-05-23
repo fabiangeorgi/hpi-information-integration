@@ -13,8 +13,10 @@ API_KEY = '2KAXFVFXLKF0TWUN'
 SUCC = 0
 FAILS = 0
 
+
 def get_stock_json(symbol: str):
     url = f'https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY&symbol={symbol}&apikey={API_KEY}'
+    # url = f'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol={symbol}&outputsize=full&apikey={API_KEY}'
     r = requests.get(url)
     return r.json()
 
@@ -31,9 +33,10 @@ class AVExtractor:
                 text = get_stock_json(symbol)
                 if not text.get('Meta Data'):
                     log.info(f"Nothing found for company {company}")
-                    break
+                    continue
                 meta = text['Meta Data']
                 stock_values = text['Weekly Time Series']
+                # stock_values = text['Time Series (Daily)']
                 stock_corporate = StockCorporate()
                 stock_corporate.id = f"{symbol}_{i}"
                 stock_corporate.stock_id = i
@@ -42,22 +45,20 @@ class AVExtractor:
                 stock_corporate.company_name_long = company_long
                 stock_corporate.last_refreshed = meta['3. Last Refreshed']
                 stock_corporate.time_zone = meta['4. Time Zone']
+                # stock_corporate.time_zone = meta['5. Time Zone']
                 for ix, stock_date in enumerate(stock_values):
-                    if ix == 0:
-                        stock_entry = StockEntry()
-                        stock_entry.id = f"{symbol}_{i}_{ix}"
-                        stock_entry.date = stock_date
-                        stock_entry.open = stock_values[stock_date]['1. open']
-                        stock_entry.close = stock_values[stock_date]['4. close']
-                        stock_entry.high = stock_values[stock_date]['2. high']
-                        stock_entry.low = stock_values[stock_date]['3. low']
-                        stock_entry.volume = stock_values[stock_date]['5. volume']
-                        stock_corporate.stockEntry.append(stock_entry)
+                    stock_entry = StockEntry()
+                    stock_entry.id = f"{symbol}_{i}_{ix}"
+                    stock_entry.date = stock_date
+                    stock_entry.open = stock_values[stock_date]['1. open']
+                    stock_entry.high = stock_values[stock_date]['2. high']
+                    stock_entry.low = stock_values[stock_date]['3. low']
+                    stock_entry.close = stock_values[stock_date]['4. close']
+                    stock_entry.volume = stock_values[stock_date]['5. volume']
+                    stock_corporate.stockEntry.append(stock_entry)
                 self.producer.produce_to_topic(stock_corporate)
                 log.debug(stock_corporate)
             except Exception as ex:
                 log.error(f"Skipping {symbol} in company {company}")
                 log.error(f"Cause: {ex}")
                 continue
-            #
-

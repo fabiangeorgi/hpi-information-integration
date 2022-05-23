@@ -32,7 +32,7 @@ COMPANY_SYMBOLS = [('SAP', 'SAP', 'SAP'), ('VOW3.DE', 'Volkswagen', 'Volkswagen'
                    ('EOAN.DE', 'E.ON', 'E.ON'), ('DTG.F', 'Daimler Truck', 'Daimler Truck'),
                    ('SRT.DE', 'Sartorius', 'Sartorius'), ('PAH3.DE', 'Porsche SE', 'Porsche SE'),
                    ('FRE.DE', 'Fresenius', 'Fresenius'), ('BEI.DE', 'Beiersdorf', 'Beiersdorf'),
-                   ('DB', 'Deutsche Bank', 'Deutsche Bank'), ('HNR1.DE', 'Hannover R�ck', 'Hannover R�ck'),
+                   ('DB', 'Deutsche Bank', 'Deutsche Bank'), ('HNR1.DE', 'Hannover Rück', 'Hannover Rück'),
                    ('FMS', 'Fresenius Medical Care', 'Fresenius Medical Care'), ('SY1.DE', 'Symrise', 'Symrise'),
                    ('CON.DE', 'Continental', 'Continental'), ('EVK.DE', 'Evonik Industries', 'Evonik Industries'),
                    ('ENR.F', 'Siemens Energy', 'Siemens Energy'), ('KBX.DE', 'Knorr-Bremse', 'Knorr-Bremse'),
