@@ -112,6 +112,8 @@ through Kowl's UI dashboard or calling the deletion API in the [bash script prov
 
 ### AV Crawler
 
+![](pictures/av-architecture.png)
+
 You can start the crawler with the command below:
 
 ```shell
