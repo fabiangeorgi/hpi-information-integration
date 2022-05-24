@@ -1,8 +1,7 @@
 import logging
 
 import pandas as pd
-from pandas import DataFrame
-import requests
+
 from av_extractor import AVExtractor
 
 API_KEY = '2KAXFVFXLKF0TWUN'
@@ -81,7 +80,7 @@ COMPANY_SYMBOLS = [('SAP', 'SAP'), ('VOW3.DE', 'Volkswagen'), ('SIE.DE', 'Siemen
 
 
 def run():
-    pass
+    AVExtractor(COMPANY_SYMBOLS).extract()
 
 
 if __name__ == "__main__":
