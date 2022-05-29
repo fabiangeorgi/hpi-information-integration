@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+package bakdata.corporate_update.v1;
+
+message Corporate {
+  string id = 1;
+  uint32 reference_id = 2;
+  string name = 3;
+  string state = 4;
+  string address = 5;
+  string description = 6;
+  string capital = 7;
+  Status status = 8;
+  repeated CorporateUpdate update = 9;
+}
+
+enum Status {
+  STATUS_UNSPECIFIED = 0;
+  STATUS_INACTIVE = 1;
+  STATUS_ACTIVE = 2;
+}
+
+message Person {
+  uint32 id = 1;
+  string first_name = 2;
+  string last_name = 3;
+  string birthday = 4;
+  string birth_location = 5;
+}
+
+message CorporateUpdate {
+  uint32 id = 1;
+  string event_date = 2;
+  EventType event_type = 3;
+  repeated Person personsAdd = 4;
+  repeated Person personsDelete = 5;
+}
+
+enum EventType {
+  PROKURA = 0;
+  HAUPTVERSAMMLUNG = 1;
+  UNKNOWN = 2;
+}
