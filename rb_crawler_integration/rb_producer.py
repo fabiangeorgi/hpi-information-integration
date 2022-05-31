@@ -6,7 +6,7 @@ from confluent_kafka.schema_registry.protobuf import ProtobufSerializer
 from confluent_kafka.serialization import StringSerializer
 
 from build.gen.bakdata.corporate_updates.v1 import corporate_updates_pb2
-from build.gen.bakdata.corporate_updates.v1.corporate_updates_pb2 import Corporate
+from build.gen.bakdata.corporate_updates.v1.corporate_updates_pb2 import CorporateUpdate
 from rb_crawler_integration.constant import SCHEMA_REGISTRY_URL, BOOTSTRAP_SERVER, TOPIC
 
 logging.basicConfig(level=logging.INFO)
@@ -19,7 +19,7 @@ class RbProducer:
         schema_registry_client = SchemaRegistryClient(schema_registry_conf)
 
         protobuf_serializer = ProtobufSerializer(
-            corporate_updates_pb2.Corporate, schema_registry_client, {"use.deprecated.format": True}
+            corporate_updates_pb2.CorporateUpdate, schema_registry_client, {"use.deprecated.format": True}
         )
 
         producer_conf = {
@@ -30,9 +30,9 @@ class RbProducer:
 
         self.producer = SerializingProducer(producer_conf)
 
-    def produce_to_topic(self, corporate: Corporate):
+    def produce_to_topic(self, corporate_update: CorporateUpdate):
         self.producer.produce(
-            topic=TOPIC, partition=-1, key=str(corporate.id), value=corporate, on_delivery=self.delivery_report
+            topic=TOPIC, partition=-1, key=str(corporate_update.id), value=corporate_update, on_delivery=self.delivery_report
         )
 
         # It is a naive approach to flush after each produce this can be optimised

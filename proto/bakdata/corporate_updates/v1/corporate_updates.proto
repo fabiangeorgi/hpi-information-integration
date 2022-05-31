@@ -2,22 +2,30 @@ syntax = "proto3";
 
 package bakdata.corporate_update.v1;
 
-message Corporate {
-  string id = 1;
-  uint32 reference_id = 2;
-  string name = 3;
-  string state = 4;
-  string address = 5;
-  string description = 6;
-  string capital = 7;
-  Status status = 8;
-  repeated CorporateUpdate update = 9;
-}
+//message Corporate {
+//  string id = 1;
+//  uint32 reference_id = 2;
+//  string name = 3;
+//  string state = 4;
+//  string address = 5;
+//  Status status = 7;
+//}
+//
+//enum Status {
+//  STATUS_UNSPECIFIED = 0;
+//  STATUS_INACTIVE = 1;
+//  STATUS_ACTIVE = 2;
+//}
 
-enum Status {
-  STATUS_UNSPECIFIED = 0;
-  STATUS_INACTIVE = 1;
-  STATUS_ACTIVE = 2;
+message CorporateUpdate {
+  uint32 id = 1;
+  string name = 2;
+  string state = 3;
+  string address = 4;
+  string event_date = 5;
+  EventType event_type = 6;
+  repeated Person personsAdd = 7;
+  repeated Person personsDelete = 8;
 }
 
 message Person {
@@ -26,18 +34,13 @@ message Person {
   string last_name = 3;
   string birthday = 4;
   string birth_location = 5;
-}
-
-message CorporateUpdate {
-  uint32 id = 1;
-  string event_date = 2;
-  EventType event_type = 3;
-  repeated Person personsAdd = 4;
-  repeated Person personsDelete = 5;
+  string name_addition = 6;
 }
 
 enum EventType {
-  PROKURA = 0;
-  HAUPTVERSAMMLUNG = 1;
-  UNKNOWN = 2;
+  EVENT_UNKNOWN = 0;
+  EVENT_PROKURA = 1;
+  EVENT_VORSTAND = 2;
+  EVENT_HAUPTVERSAMMLUNG = 3;
+  EVENT_INSOLVENZ = 4;
 }

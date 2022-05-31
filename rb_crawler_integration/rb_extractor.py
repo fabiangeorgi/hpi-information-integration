@@ -1,14 +1,17 @@
 import logging
 from time import sleep
-
+import re
 import requests
 from parsel import Selector
 
-from build.gen.bakdata.corporate_updates.v1.corporate_updates_pb2 import Corporate, Status, CorporateUpdate, EventType
+from build.gen.bakdata.corporate_updates.v1.corporate_updates_pb2 import CorporateUpdate, EventType, Person
 from rb_producer import RbProducer
 
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger(__name__)
+
+BIRTHDAY_MATCHER = '\*\d{2}.\d{2}.\d{4}'
+ADDRESS_MATCHER = '\(*[\w*\-*\s*\.*]*\s\d{1,3},\s\d{5}\s[A-Z][a-z]*\)*.'
 
 
 class RbExtractor:
@@ -16,6 +19,7 @@ class RbExtractor:
         self.rb_id = start_rb_id
         self.state = state
         self.producer = RbProducer()
+        self.id = 1
 
     def extract(self):
         while True:
@@ -29,12 +33,10 @@ class RbExtractor:
 
                 event_type = selector.xpath("/html/body/font/table/tr[3]/td/text()").get()
 
-                id = f"{self.state}_{self.rb_id}"
-
                 # TODO clean name of company and use as key -> or even use HRB number
 
                 raw_text: str = selector.xpath("/html/body/font/table/tr[6]/td/text()").get()
-                self.handle_events(id, selector, event_type, raw_text)
+                self.handle_events(selector, event_type, raw_text)
                 self.rb_id = self.rb_id + 1
             except Exception as ex:
                 log.error(f"Skipping {self.rb_id} in state {self.state}")
@@ -53,51 +55,124 @@ class RbExtractor:
     def extract_company_reference_number(selector: Selector) -> str:
         return ((selector.xpath("/html/body/font/table/tr[1]/td/nobr/u/text()").get()).split(": ")[1]).strip()
 
-    def handle_events(self, id, selector, event_type, raw_text):
-        if event_type == "Neueintragungen":
-            self.handle_new_entries(id, selector, raw_text)
-        elif event_type == "Veränderungen":
-            self.handle_changes(id, selector, raw_text)
-        elif event_type == "Löschungen":
-            self.handle_deletes(id, selector)
-
-    def handle_new_entries(self, id, selector, raw_text: str) -> Corporate:
-        log.debug(f"New company found: {selector.id}")
-        selector.event_type = "create"
-        selector.information = raw_text
-        selector.status = Status.STATUS_ACTIVE
-        # self.producer.produce_to_topic(corporate=corporate)
-
-    @staticmethod
-    def extract_change_information(corporate_update: CorporateUpdate, raw_text: str) -> CorporateUpdate:
-        if raw_text.lower().find("prokura") != -1:
-            corporate_update.event_type = EventType.PROKURA
-        elif raw_text.lower().find("hauptversammlung") != -1:
-            corporate_update.event_type = EventType.HAUPTVERSAMMLUNG
+    def handle_events(self, selector, event_type, raw_text):
+        if event_type == "Veränderungen":
+            self.handle_changes(selector, raw_text)
         else:
-            corporate_update.event_type = EventType.UNKNOWN
-        return corporate_update
+            log.info(f"Skipping {self.id} as it's status is not change")
+            self.id += 1
+        # if event_type == "Neueintragungen":
+        #     self.handle_new_entries(selector, raw_text)
+        # elif event_type == "Veränderungen":
+        #     self.handle_changes(selector, raw_text)
+        # elif event_type == "Löschungen":
+        #     self.handle_deletes(selector, raw_text)
 
-    def handle_changes(self, id, selector, raw_text: str):
-        # uint32 id = 1;
-        # string event_date = 2;
-        # EventType event_type = 3;
-        # repeated Person personsAdd = 4;
-        # repeated Person personsDelete = 5;
-        corporate = Corporate()
+
+    def extract_information_from_raw_text(self, selector, raw_text: str):
+          # TODO check if we can clean the company name (match with our stock data name)
+        re_address = [x for x in re.finditer(pattern=ADDRESS_MATCHER, string=raw_text)]
+
+        # print(raw_text)
+        text = raw_text[re_address[0].span()[1]:].strip()
+        text = [x for x in re.split(f'{BIRTHDAY_MATCHER}.|;', text) if x != '']
+        # [print(x, '\n') for x in text]
+        deletion = False
+        corporates = []
         corporate_update = CorporateUpdate()
-        corporate_update.id = 1
-        corporate_update.event_date = selector.xpath("/html/body/font/table/tr[4]/td/text()").get()
+        for t in text:
+            old_event_type = corporate_update.event_type
+            if t.lower().find("prokura") != -1:
+                if old_event_type != EventType.EVENT_PROKURA and old_event_type:
+                    corporates.append(corporate_update)
+                    corporate_update = CorporateUpdate()
+                corporate_update.event_type = EventType.EVENT_PROKURA
+            elif t.lower().find("hauptversammlung") != -1:
+                if old_event_type != EventType.EVENT_HAUPTVERSAMMLUNG and old_event_type:
+                    corporates.append(corporate_update)
+                    corporate_update = CorporateUpdate()
+                corporate_update.event_type = EventType.EVENT_HAUPTVERSAMMLUNG
+            elif t.lower().find("vorstand") != -1 or t.lower().find("geschäftsführer") != -1:
+                if old_event_type != EventType.EVENT_VORSTAND and old_event_type:
+                    corporates.append(corporate_update)
+                    corporate_update = CorporateUpdate()
+                corporate_update.event_type = EventType.EVENT_VORSTAND
+            elif t.lower().find("insolvenz") != -1:
+                if old_event_type != EventType.EVENT_INSOLVENZ and old_event_type:
+                    corporates.append(corporate_update)
+                    corporate_update = CorporateUpdate()
+                corporate_update.event_type = EventType.EVENT_INSOLVENZ
+            else:
+                if old_event_type != EventType.EVENT_UNKNOWN and old_event_type:
+                    corporates.append(corporate_update)
+                    corporate_update = CorporateUpdate()
+                corporate_update.event_type = EventType.EVENT_UNKNOWN
 
-        corporate_update = self.extract_change_information(corporate_update, raw_text)
+            if corporate_update.id == 0:
+                corporate_update.id = self.id
+                self.id = self.id + 1
+                corporate_update.event_date = selector.xpath("/html/body/font/table/tr[4]/td/text()").get()
+                corporate_update.state = self.state
+                corporate_update.name = raw_text.split(', ')[0].strip()
+                corporate_update.address = re_address[0].group().replace('(', '').replace(')', "")[:-1].strip()
 
-        corporate.update.append(corporate_update)
-        log.error("test")
 
-        self.producer.produce_to_topic(corporate=corporate)
 
-    def handle_deletes(self, selector):
-        log.debug(f"Company {selector.id} is inactive")
-        selector.event_type = "delete"
-        selector.status = Status.STATUS_INACTIVE
-        # self.producer.produce_to_topic(corporate=corporate)
+            # print(t)
+            if 'erloschen' in t.lower() or 'nicht mehr' in t.lower() or 'ausgeschieden' in t.lower():
+                deletion = True
+            elif 'gesamtprokura' in t.lower() or 'bestellt' in t.lower():
+                deletion = False
+            t = t.split(': ')[-1].strip(', ')
+            if len(t.replace('.', ' ').split(', ')) == 3:
+                surname, name, birth_location = t.replace('.', ' ').split(', ')
+                surname = surname.split(': ')[-1]
+                person = Person()
+                person.name_addition = ' '.join(surname.split(' ')[:-1]).strip() if len(
+                    ' '.join(surname.split(' ')[:-1]).strip()) < 10 else ''
+                person.first_name = name.strip()
+                person.last_name = surname.split(' ')[-1].strip()
+                person.birth_location = birth_location.strip()
+                if deletion:
+                    corporate_update.personsDelete.append(person)
+                else:
+                    corporate_update.personsAdd.append(person)
+
+            else:
+                birthdays = re.finditer(pattern=BIRTHDAY_MATCHER, string=t)
+                for match in birthdays:
+                    birthday = match.group().replace("*", '')
+                    personal_information = t[:match.span()[0]].strip().split(': ')
+                    if 'erloschen' in ' '.join(personal_information).lower() or 'nicht mehr' in ' '.join(personal_information).lower() or 'ausgeschieden' in ' '.join(personal_information).lower():
+                        deletion = True
+                    elif 'gesamtprokura' in t.lower() or 'bestellt' in t.lower():
+                        deletion = False
+                    if len(personal_information) > 1:
+                        personal_information = ' '.join(personal_information[1:]).split(',')
+                    else:
+                        personal_information = ' '.join(personal_information).split(',')
+                    if 3 <= len(personal_information) <= 4:
+                        # print(personal_information)
+                        surname, name, birth_location = personal_information[0:3]
+                        person = Person()
+                        person.name_addition = ' '.join(surname.split(' ')[:-1]).strip()
+                        person.birthday = birthday
+                        person.first_name = name.strip()
+                        person.last_name = surname.split(' ')[-1].strip()
+                        person.birth_location = birth_location.strip()
+                        if deletion:
+                            corporate_update.personsDelete.append(person)
+                        else:
+                            corporate_update.personsAdd.append(person)
+        corporates.append(corporate_update)
+        return corporates
+
+    def extract_change_information(self, selector: Selector, raw_text: str) -> CorporateUpdate:
+        corporate_updates = self.extract_information_from_raw_text(selector, raw_text)
+        return corporate_updates
+
+    def handle_changes(self, selector, raw_text: str):
+        corporate_updates = self.extract_change_information(selector, raw_text)
+        print(corporate_updates)
+        for corporate_update in corporate_updates:
+            self.producer.produce_to_topic(corporate_update=corporate_update)
