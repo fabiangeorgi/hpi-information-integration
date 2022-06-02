@@ -70,7 +70,7 @@ class RbExtractor:
 
 
     def extract_information_from_raw_text(self, selector, raw_text: str):
-          # TODO check if we can clean the company name (match with our stock data name)
+        # TODO check if we can clean the company name (match with our stock data name) cleanco!
         re_address = [x for x in re.finditer(pattern=ADDRESS_MATCHER, string=raw_text)]
 
         # print(raw_text)
@@ -116,9 +116,6 @@ class RbExtractor:
                 corporate_update.name = raw_text.split(', ')[0].strip()
                 corporate_update.address = re_address[0].group().replace('(', '').replace(')', "")[:-1].strip()
 
-
-
-            # print(t)
             if 'erloschen' in t.lower() or 'nicht mehr' in t.lower() or 'ausgeschieden' in t.lower():
                 deletion = True
             elif 'gesamtprokura' in t.lower() or 'bestellt' in t.lower():
@@ -175,4 +172,5 @@ class RbExtractor:
         corporate_updates = self.extract_change_information(selector, raw_text)
         print(corporate_updates)
         for corporate_update in corporate_updates:
-            self.producer.produce_to_topic(corporate_update=corporate_update)
+            if corporate_update.id != 0:
+                self.producer.produce_to_topic(corporate_update=corporate_update)
