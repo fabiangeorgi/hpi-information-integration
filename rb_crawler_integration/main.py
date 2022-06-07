@@ -25,6 +25,6 @@ def run(rb_id: int, state: State):
 
 
 if __name__ == "__main__":
-    RbExtractor(390870, 'bw').extract()
+#     RbExtractor(390870, 'bw').extract()
     # RbExtractor(146468, 'bw').extract()
-    # run()
+    run()
