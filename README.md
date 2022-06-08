@@ -159,6 +159,32 @@ Options:
   --help                          Show this message and exit.
 ```
 
+### RB Crawler Integration
+
+For the integration schema we modified the RB Crawler to only crawl changes from the Handelregisterbekanntmachungen:
+
+```shell
+poetry run python rb_crawler_integration/main.py --id $RB_ID --state $STATE
+```
+
+The `--id` option is an integer, which determines the initial event in the handelsregisterbekanntmachungen to be
+crawled.
+
+The `--state` option takes a string (only the ones listed above). This string defines the state where the crawler should
+start from.
+
+You can use the `--help` option to see the usage:
+
+```
+Usage: main.py [OPTIONS]
+
+Options:
+  -i, --id INTEGER                The rb_id to initialize the crawl from
+  -s, --state [bw|by|be|br|hb|hh|he|mv|ni|nw|rp|sl|sn|st|sh|th]
+                                  The state ISO code
+  --help                          Show this message and exit.
+```
+
 ## Query data
 
 ### Kowl

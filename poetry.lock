@@ -134,6 +134,14 @@ optional = false
 python-versions = "*"
 
 [[package]]
+name = "cleanco"
+version = "2.2"
+description = "Python library to process company names"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "click"
 version = "8.0.2"
 description = "Composable command line interface toolkit"
@@ -938,7 +946,7 @@ testing = ["coverage (>=5.0.3)", "zope.event", "zope.testing"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "60a89835169a63bb8e75c3ba2cbe96ad9604cbd1be6326336194ce7b163af1fb"
+content-hash = "af07e7c7e371cdd0c2980a977d55a961e545fb3b27cc42f5b403e23e1f9295a4"
 
 [metadata.files]
 async-generator = [
@@ -1030,6 +1038,10 @@ charset-normalizer = [
 ]
 chromedriver-binary = [
     {file = "chromedriver-binary-99.0.4844.51.0.tar.gz", hash = "sha256:762b8fc99134e41cd8e61a74cc9c6076d4898751df0c94ddce7135bf58b8f6ba"},
+]
+cleanco = [
+    {file = "cleanco-2.2-py3-none-any.whl", hash = "sha256:0364fef77eea7a0db582e5b61435c59d86724c18fe0ebc5cb12ad37500f7183f"},
+    {file = "cleanco-2.2.tar.gz", hash = "sha256:f16717234c1936866233283efc1387702dada7103fee8a6e712ca7caee2d182d"},
 ]
 click = [
     {file = "click-8.0.2-py3-none-any.whl", hash = "sha256:3fab8aeb8f15f5452ae7511ad448977b3417325bceddd53df87e0bb81f3a8cf8"},

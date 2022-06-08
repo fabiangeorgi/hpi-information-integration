@@ -18,23 +18,15 @@ package bakdata.corporate_update.v1;
 //}
 
 message CorporateUpdate {
-  uint32 id = 1;
+  string id = 1;
   string name = 2;
-  string state = 3;
-  string address = 4;
-  string event_date = 5;
-  EventType event_type = 6;
-  repeated Person personsAdd = 7;
-  repeated Person personsDelete = 8;
-}
-
-message Person {
-  uint32 id = 1;
-  string first_name = 2;
-  string last_name = 3;
-  string birthday = 4;
-  string birth_location = 5;
-  string name_addition = 6;
+  string clean_name = 3;
+  string state = 4;
+  string address = 5;
+  string event_date = 6;
+  EventType event_type = 7;
+  repeated Person personsAdd = 8;
+  repeated Person personsDelete = 9;
 }
 
 enum EventType {
@@ -44,3 +36,13 @@ enum EventType {
   EVENT_HAUPTVERSAMMLUNG = 3;
   EVENT_INSOLVENZ = 4;
 }
+
+message Person {
+  string id = 1;
+  string first_name = 2;
+  string last_name = 3;
+  string birthday = 4;
+  string birth_location = 5;
+  string name_addition = 6;
+}
+
