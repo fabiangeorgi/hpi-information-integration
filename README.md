@@ -121,18 +121,6 @@ poetry run python av_crawler/mapper.py
 ```
 
 
-### RB Integration Crawler
-
-![](pictures/av-architecture.png)
-
-You can start the crawler with the command below:
-
-```shell
-poetry run python rb_crawler_integration/main.py 
-```
-
-
-
 ### RB Crawler
 
 You can start the crawler with the command below:
