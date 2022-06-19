@@ -27,6 +27,7 @@ message CorporateUpdate {
   EventType event_type = 7;
   repeated Person personsAdd = 8;
   repeated Person personsDelete = 9;
+  uint32 reference_company_id = 10;
 }
 
 enum EventType {

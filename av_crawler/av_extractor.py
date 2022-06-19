@@ -1,6 +1,7 @@
 import logging
+
+from av_crawler.av_producer import AVProducer
 from build.gen.bakdata.stock.v1.stock_pb2 import StockCorporate, StockEntry
-from av_producer import AVProducer
 
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger(__name__)

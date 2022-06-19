@@ -5,21 +5,21 @@ from confluent_kafka.schema_registry import SchemaRegistryClient
 from confluent_kafka.schema_registry.protobuf import ProtobufSerializer
 from confluent_kafka.serialization import StringSerializer
 
-from build.gen.bakdata.stock.v1 import stock_pb2
-from build.gen.bakdata.stock.v1.stock_pb2 import StockCorporate
-from av_crawler.constant import SCHEMA_REGISTRY_URL, BOOTSTRAP_SERVER, STOCK_TOPIC
+from build.gen.bakdata.corporate_updates.v1 import corporate_updates_pb2
+from build.gen.bakdata.corporate_updates.v1.corporate_updates_pb2 import CorporateUpdate
+from rb_cleaner.constant import SCHEMA_REGISTRY_URL, BOOTSTRAP_SERVER, OUTPUT_TOPIC
 
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger(__name__)
 
 
-class AVProducer:
+class RbProducer:
     def __init__(self):
         schema_registry_conf = {"url": SCHEMA_REGISTRY_URL}
         schema_registry_client = SchemaRegistryClient(schema_registry_conf)
 
         protobuf_serializer = ProtobufSerializer(
-            stock_pb2.StockCorporate, schema_registry_client, {"use.deprecated.format": True}
+            corporate_updates_pb2.CorporateUpdate, schema_registry_client, {"use.deprecated.format": True}
         )
 
         producer_conf = {
@@ -30,10 +30,9 @@ class AVProducer:
 
         self.producer = SerializingProducer(producer_conf)
 
-    def produce_to_topic(self, stock_corporate: StockCorporate):
+    def produce_to_topic(self, corporate_update: CorporateUpdate):
         self.producer.produce(
-            topic=STOCK_TOPIC, partition=-1, key=str(stock_corporate.id), value=stock_corporate,
-            on_delivery=self.delivery_report
+            topic=OUTPUT_TOPIC, partition=-1, key=str(corporate_update.id), value=corporate_update, on_delivery=self.delivery_report
         )
 
         # It is a naive approach to flush after each produce this can be optimised

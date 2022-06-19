@@ -2,7 +2,7 @@ import logging
 
 import pandas as pd
 
-from av_extractor import AVExtractor
+from av_crawler.av_extractor import AVExtractor
 
 API_KEY = '2KAXFVFXLKF0TWUN'
 
