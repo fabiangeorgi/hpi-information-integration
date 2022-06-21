@@ -9,6 +9,7 @@ from cleaner.dump_parser import DumpParser
 from cleaner.rb_producer import RbProducer
 from cleanco import basename
 from fuzzywuzzy import process
+import re
 
 logging.basicConfig(
     level=os.environ.get("LOGLEVEL", "INFO"), format="%(asctime)s | %(name)s | %(levelname)s | %(message)s"
@@ -38,22 +39,25 @@ def run(file: str):
             break
 
         # cleaning and transformation
-        cleaned_name = basename(corporate_update.name.replace('Aktiengesellschaft', '')).strip()
+        cleaned_name = basename(re.sub(r'aktiengesellschaft', '', corporate_update.name, flags=re.IGNORECASE)).strip().replace(' ', '')
         index = -1
+        match_score = 0
         try:
             index = COMPANY_NAMES.index(cleaned_name)
+            match_score = 100
         except ValueError:
             pass
 
         if index == -1:
-            # use fuzzy search
-            # TODO set the threshold better
+            threshold = 90
             result = process.extractOne(cleaned_name, COMPANY_NAMES)
-            if result[1] > SCORE_THRESHOLD:
+            if result[0].lower().replace(' ', '') in cleaned_name.lower() and (result[1] > threshold or (result[1] >= threshold and re.search(r'(aktiengesellschaft$|\sag$|\sse$)', corporate_update.name, flags=re.IGNORECASE))):
                 index = COMPANY_NAMES.index(result[0])
+                match_score = result[1]
 
         corporate_update.reference_company_id = index
         corporate_update.clean_name = cleaned_name
+        corporate_update.match_score = match_score
 
         producer.produce_to_topic(corporate_update)
 
