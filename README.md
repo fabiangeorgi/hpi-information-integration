@@ -120,6 +120,14 @@ You can start the crawler with the command below:
 poetry run python av_crawler/mapper.py 
 ```
 
+### RB Cleaner
+
+You can start the cleaner with the command below:
+
+```shell
+poetry run python rb_cleaner/main.py 
+```
+
 
 ### RB Crawler
 

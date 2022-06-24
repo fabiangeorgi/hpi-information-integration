@@ -7,7 +7,7 @@ from confluent_kafka.serialization import StringSerializer
 
 from build.gen.bakdata.corporate_updates.v1 import corporate_updates_pb2
 from build.gen.bakdata.corporate_updates.v1.corporate_updates_pb2 import CorporateUpdate
-from cleaner.constant import SCHEMA_REGISTRY_URL, BOOTSTRAP_SERVER, OUTPUT_TOPIC
+from constant import SCHEMA_REGISTRY_URL, BOOTSTRAP_SERVER, OUTPUT_TOPIC
 
 logging.basicConfig(level=logging.INFO)
 log = logging.getLogger(__name__)
