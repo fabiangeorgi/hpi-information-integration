@@ -217,3 +217,17 @@ You can stop and remove all the resources by running:
 ```shell
 docker-compose down
 ```
+
+## Setup for Live Demo
+1. Download the data via owncloud: `https://owncloud.hpi.de/s/uop83UucAOBFWhn`
+2. Let the containers run. `docker-compose up -d`
+3. Load in the elastic search data and create both indices **corporates** and **stocks**. (Use the files provided via owncloud) <br>
+`elasticdump --output=http://localhost:9200/corporates --input=<path/to/file>cleaned.json --limit 10000` <br> 
+`elasticdump --output=http://localhost:9200/stocks --input=<path/to/file>/stocks.json --limit 10000`
+4. Start the Angular application `cd angular_ui && ng s`
+5. Visit `http://localhost:4200/` and enjoy!
+
+<br>
+Example:
+
+![](example.png)
