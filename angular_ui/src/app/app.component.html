@@ -1,0 +1,25 @@
+<router-outlet></router-outlet>
+<div class="paddingTop">
+  <div class="row">
+    <form class="example-form">
+      <mat-form-field class="example-full-width" appearance="fill">
+        <mat-label>Search for a company</mat-label>
+        <input type="text"
+               aria-label="Number"
+               matInput
+               [formControl]="myControl"
+               [matAutocomplete]="auto">
+        <mat-autocomplete #auto="matAutocomplete">
+          <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+            {{option}}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+    </form>
+    <button class="height" mat-raised-button color="primary" (click)="this.searchCompany()">Search</button>
+  </div>
+
+  <div class="bar-chart">
+    <div id="chartContainer" class="chart-container"></div>
+  </div>
+</div>
