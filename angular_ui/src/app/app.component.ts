@@ -230,6 +230,7 @@ export class AppComponent implements OnInit {
 
     this.companyId = result['hits']['hits'][0]['_source']['stock_id'];
     this.stockDataToVisualize = result['hits']['hits'][0]['_source']['stockEntry'];
+    this.stockDataToVisualize.sort((date1, date2) => date1 - date2);
     await this.visualizeData();
   }
 
@@ -267,6 +268,7 @@ export class AppComponent implements OnInit {
 
     result['hits']['hits'].forEach((entry: any) => {
       const data = entry['_source'];
+      // console.log(data['match_score'], data['match_score'] <= 90)
       if (data['match_score'] <= 90) {
         return;
       }
@@ -364,37 +366,63 @@ export class AppComponent implements OnInit {
 
 
   private static mapEvent(event: string, newString: string, removedString: string): string {
+    const lengthAdd = newString.split(', ').length;
+    const lengthRemove = removedString.split(', ').length
+    var gonePerson = 'Gone Person'
+    var newPerson = 'New Person'
+    if (lengthAdd > 1) {
+      newPerson = newPerson + 's'
+    }
+    if (lengthRemove > 1) {
+      gonePerson = gonePerson + 's'
+    }
     switch (event) {
       case 'EVENT_PROKURA':
-        let prokuraString = 'Prokura'
+        let prokuraString = 'PROKURA'
         if (newString != '') {
-          prokuraString = prokuraString + `\nNew Person: ${newString}`
+          prokuraString = prokuraString + `\n\n${newPerson}:  (${lengthAdd})\n${newString}`
         }
         if (removedString != '') {
-          prokuraString = prokuraString + `\nGone Person: ${removedString}`
+          if (prokuraString != ''){
+            prokuraString = prokuraString + `\n`
+          }
+          prokuraString = prokuraString + `\n${gonePerson}: (${lengthRemove})\n${removedString}`
         }
         return prokuraString;
       case 'EVENT_VORSTAND':
-        let returnString = 'Vorstand'
+        let returnString = 'VORSTAND'
         if (newString != '') {
-          returnString = returnString + `\nNew Person: ${newString}`
+
+          returnString = returnString + `\n\n${newPerson}: (${lengthAdd})\n${newString}`
         }
         if (removedString != '') {
-          returnString = returnString + `\nGone Person: ${removedString}`
+          if (returnString != ''){
+            returnString = returnString + `\n`
+          }
+          returnString = returnString + `${gonePerson}: (${lengthRemove})\n${removedString}`
         }
         return returnString;
       case 'EVENT_HAUPTVERSAMMLUNG':
-        return 'Hauptversammlung';
+        let hauptversammlungString = 'HAUPTVERSAMLUNG'
+        if (newString != '') {
+          hauptversammlungString = hauptversammlungString + `\n\n${newPerson}:  (${lengthAdd})\n${newString}`
+        }
+        if (removedString != '') {
+          if (hauptversammlungString != ''){
+            hauptversammlungString = hauptversammlungString + `\n`
+          }
+          hauptversammlungString = hauptversammlungString + `\n${gonePerson}: (${lengthRemove})\n${removedString}`
+        }
+        return hauptversammlungString;
       case 'EVENT_INSOLVENZ':
-        return 'Insolvenz';
+        return 'INVOLVENZ';
       case 'EVENT_UNKNOWN':
       default:
-        return 'Unknown Event';
+        return 'UNKOWN EVENT';
     }
   }
 
   private async plotHandelsRegisterData(plot: anychart.core.stock.Plot): Promise<void> {
-    console.log("TEST");
     const data = await this.getHandelsRegisterData();
     console.log(data);
     if (data.length === 0) {
